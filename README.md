@@ -1,10 +1,11 @@
-**Project Title**
+**Trillio Files Operations**
 
 This Repository is related to Backup Opeartions of Partitions.
 
 **Getting Started**
 
 python manage.py makemigrations --settings=Trillio_Files_Operations
+
 python manage.py migrate --settings=Trillio_Files_Operations
 
 python manage.py runserver <ip>:<port> --settings=Trillio_Files_Operations
