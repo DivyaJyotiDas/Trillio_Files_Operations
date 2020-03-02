@@ -1,16 +1,45 @@
-1. This Repository is related to Backup Opeartions of Partitions.
+**Project Title**
 
-RUNNING:-
-1. pip install -r requirements/base.txt
-2. python manage.py makemigrations --settings=Trillio_Files_Operations
-3. python manage.py migrate --settings=Trillio_Files_Operations
+This Repository is related to Backup Opeartions of Partitions.
 
-SERVER UP:-
-1. python manage.py runserver <ip>:<port> --settings=Trillio_Files_Operations
+**Getting Started**
 
-RUNNING PYTEST:-
-1. pytest 
+python manage.py makemigrations --settings=Trillio_Files_Operations
+python manage.py migrate --settings=Trillio_Files_Operations
 
-SWAGGER:-
-1. http://<ip>:<port>/docs
+python manage.py runserver <ip>:<port> --settings=Trillio_Files_Operations
+
+
+**Prerequisites**
+
+pip install -r requirements/base.txt
+
+**Installing**
+
+_requirements_ directory contains all the files necessary for install.
+
+_models_ directory contains all the DB related schema.
+
+_settings_ directory contains all the settings that were used for tests/dev/prod environment.
+
+
+**Running the tests**
+
+pytest --cov=. --disable-warnings
+
+**_Docs_**
+
+http://<x.x.x.x>:<8080>/docs
+
+
+**Deployment**
+
+In Progress
+
+**Contributing**
+
+1. Divya Das<Divya.Das@afourtech.com>
+
+
+
 
