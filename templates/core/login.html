@@ -1,0 +1,401 @@
+{% extends "base.html" %}
+{% block head %}
+    <title>Trillio File Operations</title>
+    <style>
+
+			html{
+				width:100%;
+				height:100%;
+			}
+			body{
+				width:100%;
+				height:100%;
+				background-color:#DDD;
+				object-fit: cover;
+			}
+			div.dataTables_wrapper {
+     		   margin-bottom: 3em;
+    		}
+			tr.group:hover {
+				background-color: #ddd;
+			}
+            td.details-control {
+                background: url('http://next.datatables.net/examples/resources/details_open.png') no-repeat center center;
+                cursor: pointer;
+            }
+            tr.shown td.details-control {
+                background: url('http://next.datatables.net/examples/resources/details_close.png') no-repeat center center;
+            }
+            .required:before{
+              content:"*";
+              font-weight:bold;
+            }
+            .control-label:before{
+               color: red;
+               content: "*";
+               position: absolute;
+               margin-left: -10px;
+            }
+
+            td.data {font-size:9px}
+		</style>
+		<title>Trillio File Operations</title>
+		<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+		<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+  		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+  		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+        <link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
+        <script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-sm-6" style="background-color:white;">
+            <form action="#" method="post">
+                <button type="button" id="add_tc_id" class="btn btn-default btn-lg" onclick="flushData();" formmethod="post" style="float: right;" data-toggle="modal" data-target="#myModal">
+                    <span class="glyphicon glyphicon-plus-sign"></span> Backup Operations
+                </button>
+            </form>
+        </div>
+    </div>
+    </br>
+    <div id="datatables_id">
+        <table id="table1" class="cell-border" style="width: fit-content" style="height: fit-content">
+            <thead>
+                <tr>
+                    <th>JOB-ID</th>
+                    <th>JOB-Name</th>
+                    <th>Author</th>
+                    <th>JOB Submitted At</th>
+                    <th>Execution Time</th>
+                    <th>Status</th>
+                    <th>Progress</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <!-- Modal -->
+          <div class="modal fade" id="myModal" role="dialog">
+              <div class="modal-dialog modal-lg">
+                  <form action="" class="col-sm-11 control-label" id="testcases_form">
+                    <!-- Modal content-->
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h4 class="modal-title" id="tasks_type_id">Partition Backup</h4>
+                        </div>
+                         <div class="modal-body">
+                          <div class="form-group">
+                            <label class="col-sm-6 control-label">Author:</label>
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <label for="author_id"></label><input class="form-control" id="author_id" type="text" style="white-space: pre-wrap" disabled="disabled" value="{{ context.session.displayName }}">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                           <div class="modal-body">
+                          <div class="form-group">
+                              <label class="col-sm-6">Hostname/IP:</label>
+                            <div class="col-sm-5">
+                                <input class="form-control" id="taskgroupname_id" type="text" style="white-space: pre-wrap">
+                            </div>
+                          </div>
+                        </div>
+                           <div class="modal-body">
+                          <div class="form-group">
+                              <label class="col-sm-6">Password:</label>
+                            <div class="col-sm-5">
+                                <input class="form-control" id="password_id" type="password" style="white-space: pre-wrap">
+                            </div>
+                          </div>
+                        </div>
+                          <div class="modal-body">
+                                <div class="form-group">
+                                  <label class="col-sm-6">Smart Backup:</label>
+                                    <div class="col-sm-5">
+                                      <!-- Default unchecked -->
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" name="smartBackup" id="defaultUnchecked_id">
+                                            <label class="custom-control-label" for="defaultUnchecked">Default unchecked</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                  <label class="col-sm-6">Available Partitions:</label>
+                                    <div class="col-sm-5">
+                                        <select id="lst_tasks_id"  style="width:90%">
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                          </br></br>
+                        <div class="modal-footer">
+                            <input type="submit" id="submit_modal" value="SUBMIT" class="btn btn-default" onclick="f();" data-dismiss="modal" disabled="disabled"/>
+                            <button type="button" name="mod-submit" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                </form>
+
+            </div>
+          </div>
+
+    <script>
+
+
+                 $(function () {
+                    $('#lst_tasks_id').multiselect({
+                        includeSelectAllOption: true
+                    });
+                });
+
+                $("input[type='text'], textarea").on("keyup", function(){
+                    if($(this).val() != "" && $("textarea#steps_id").val() != "" && $("textarea#expected_results_id").val() != ""){
+                        $("input[type='submit']").removeAttr("disabled");
+                    }
+                });
+
+            var from = null
+            var to = null
+            var _data = null
+
+            function flushData(){
+                $("#tasks_type_id").text("Partition Backup")
+                $('#author_id').val('')
+                var author_id = $('#username').text();
+                author_id = author_id.substr(author_id.indexOf(" ")+1)
+                $('#author_id').val(author_id)
+                $('#summary_id').val('')
+                $('#steps_id').val('')
+                $('#expected_results_id').val('')
+                $('#tags_id').val('')
+                $('#max_execution_time_id').val('')
+                $("input[type='submit']").attr("disabled", "disabled");
+
+            }
+
+
+
+            function f() {
+
+                if(from.id == "add_tc_id"){
+                        author = $('#author_id').val();
+                        hostname = $('#taskgroupname_id').val();
+                        passwd = $('#password_id').val();
+                        smartBackup = $('#defaultUnchecked_id').is(":checked")
+
+                        source_partition = $('#lst_tasks_id').val();
+                        added_at = new Date()
+                        data = {
+                                    "author": author,
+                                    "startTime": added_at,
+                                    "hostname": hostname,
+                                    "password": passwd,
+                                    "smartBackup": smartBackup,
+                                    "sourcePartition": source_partition
+                                };
+
+                        $.ajax({
+                            url: "api/backup/create",
+                            type: "POST",
+                            contentType: "application/json;charset=utf-8",
+                            data: JSON.stringify(data),
+                            success: function(data){
+                                //alert(data)
+
+                                    }
+                        });
+                        }
+
+                }
+
+            $(document).ready(function() {
+                var table = $('#table1').DataTable({
+                    "processing": true,
+                    "order": [0, 'desc'],
+                    "stateSave": true,
+                    "autoWidth": true,
+                    "deferLoading": 10,
+                    "ajax": {
+                        "url": "api/backup/list",
+                        dataSrc: '',
+                    },
+                    "columnDefs" : [{
+                                        "targets": '_all',
+                                        "createdCell": function (td, cellData, rowData, row, col) {
+                                            $(td).css('padding', '5px')
+                                            $(td).css('white-space', 'pre-wrap')
+
+                                        }
+
+                                    },{
+                                        "targets": 0,
+                                        "data" : null,
+			                            "render": function ( data, type, row, meta ) {
+						                    return '<p style="color: black">'+data['job_id']+'</p>'
+    					                    }
+                                    },
+                                    {
+                                        "targets": 1,
+                                        "data" : null,
+			                            "render": function ( data, type, row, meta ) {
+						                    return '<center><p style="color: black">'+data['job_name']+'</p></center>'
+    					                    }
+                                    },
+                                    {
+                                        "targets": 2,
+                                        "data" : null,
+			                            "render": function ( data, type, row, meta ) {
+			                                if(data['author'] != null)
+						                        return '<center><p style="color: black">'+data['author']+'</p></center>'
+						                    else
+						                        return '<center><p style="color: black">'+"-"+'</p></center>'
+    					                    }
+                                    },
+                                    {
+                                        "targets": 3,
+                                        "data" : null,
+			                            "render": function ( data, type, row, meta ) {
+			                                if(data['start_time'] != null)
+						                        return '<center><p style="color: black">'+data['start_time']+'</p></center>'
+                                            else
+                                                return '<center><p style="color: black">'+"-"+'</p></center>'
+    					                    }
+                                    },
+
+                                    {
+                                        "targets": 4,
+                                        "data" : null,
+			                            "render": function ( data, type, row, meta ) {
+			                                if(data['end_time'] != null)
+						                        return '<center><p style="color: black">'+data['end_time']+'</p></center>'
+                                            else
+                                                return '<center><p style="color: black">'+"-"+'</p></center>'
+    					                    }
+                                    },
+
+                                    {
+                                        "targets": 5,
+                                        "data" : null,
+			                            "render": function ( data, type, row, meta ) {
+			                                 if(data['status'] != null)
+						                        return '<center><p style="color: black">'+data['status']+'</p></center>'
+						                    else
+						                        return '<center><p style="color: black">'+"-"+'</p></center>'
+    					                    }
+                                    },
+                                    {
+                                        "targets": 6,
+                                        "data" : null,
+			                            "render": function ( data, type, row, meta ) {
+                                            //alert(data['progress'])
+			                                if(data['progress'] != null)
+			                                    return '<div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow=" "aria-valuemin="0" aria-valuemax="100" style="width:'+data['progress'].split('#')[0]+';color:black">'+data['progress'].split("#")[0]+ "     " +data['progress'].split('#')[1]+'</div> </div>'
+			                                    //return '<progress value="'+data['progress']+'" max="100">'+data['progress']+'</progress>'
+
+						                    else
+						                        return '<center><p style="color: black">'+"-"+'</p></center>'
+    					                    }
+                                    },
+                                    {
+                                        "targets": -1,
+                                        "data" : null,
+			                            "render": function ( data, type, row, meta ) {
+
+						                    return '<button type="submit" class="btn btn-default btn-sm"> \
+                                                    <span class="glyphicon glyphicon-remove"></span><b> Stop Backup </b> \
+                                                </button>'
+    					                    }
+                                    }
+                    ]
+                });
+
+
+                $('#table1 tbody').on('click', 'td.details-control', function () {
+                    var tr = $(this).closest('tr');
+                    var row = table.row( tr );
+
+                    if ( row.child.isShown() ) {
+                        // This row is already open - close it
+                        row.child.hide();
+                        tr.removeClass('shown');
+                    }
+                    else {
+                        // Open this row
+                        row.child( format(row.data()) ).show();
+                        tr.addClass('shown');
+                    }
+                } );
+
+                $('#myModal').on('shown.bs.modal', function (e) {
+                    from = e.relatedTarget ? e.relatedTarget : e.fromElement;
+                    to = e.target ? e.target : e.toElement;
+
+                    $("#taskgroupname_id").change(function() {
+                            console.log("Input text changed!");
+                            hostname = $('#taskgroupname_id').val()
+                            passwd = $('#password_id').val()
+                            $.get("api/partitions/list?hostname="+hostname+"&password="+passwd, function(data, status){
+                        alert(data)
+                        var data_for_option = new Array();
+                        for(var i=0;i<data.length;i++){
+
+                            label = data[i]
+                            value = data[i]
+                            json_data = {label: label, value: value}
+                            data_for_option.push(json_data)
+
+                            }
+                        console.log(data_for_option)
+                        $("#lst_tasks_id").multiselect('dataprovider', data_for_option);
+                        });
+                    });
+
+                    $("#password_id").change(function() {
+                            console.log("Input text changed!");
+                            hostname = $('#taskgroupname_id').val()
+                            passwd = $('#password_id').val()
+                            $.get("api/partitions/list?hostname="+hostname+"&password="+passwd, function(data, status){
+                        alert(data)
+                        var data_for_option = new Array();
+                        for(var i=0;i<data.length;i++){
+
+                            label = data[i]
+                            value = data[i]
+                            json_data = {label: label, value: value}
+                            data_for_option.push(json_data)
+
+                            }
+                        console.log(data_for_option)
+                        $("#lst_tasks_id").multiselect('dataprovider', data_for_option);
+                        });
+                    });
+
+                    if (from.id == "tc_edit")
+                            $("h4").text("TaskGroup Edit")
+
+
+
+                });
+
+
+
+                table.tables().header().to$().find('th:eq(6)').css('min-width', '190px');
+                table.tables().header().to$().find('th:eq(-1)').css('min-width', '140px');
+                $(window).trigger('resize');
+
+                setInterval( function () {
+                    table.ajax.reload();
+                }, 10000 );
+            });
+
+
+    </script>
+{% endblock %}
