@@ -12,9 +12,3 @@ def test_backup_partition(mock_login):
     assert conn.status is True
 
 
-@mock.patch('pexpect.pxssh.pxssh.login')
-def test_backup_partition_when_login_is_false_should_return_exception(mock_login):
-    mock_login.side_effect = pxssh.ExceptionPxssh
-
-    conn = Connection(hostname='10.1.2.217', password='nopasswd')
-    assert conn.status
