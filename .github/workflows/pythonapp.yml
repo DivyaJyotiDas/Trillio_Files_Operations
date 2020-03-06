@@ -27,4 +27,4 @@ jobs:
     - name: Test with pytest
       run: |
         pip install pytest
-        pytest
+        pytest -s tests/ --ds=Trillio_Files_Operations.settings.base --disable-warnings

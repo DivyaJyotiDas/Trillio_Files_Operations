@@ -3,6 +3,7 @@ Django==3.0.3
 pytz==2019.3
 sqlparse==0.3.0
 pexpect==4.8.0
-mock
+pytest-django==3.8.0
+mock==4.0.1
 djangorestframework==3.11.0
 django-rest-swagger==2.2.0
